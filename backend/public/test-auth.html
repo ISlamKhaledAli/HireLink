@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Authentication</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .card { border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 8px; }
+        input { margin-bottom: 10px; padding: 8px; width: 200px; display: block; }
+        button { padding: 10px 15px; cursor: pointer; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>Laravel Auth, Sanctum & Spatie Roles Test</h1>
+    
+    <div class="card">
+        <h3>1. Login (Test User)</h3>
+        <input type="email" id="email" value="admin@example.com" placeholder="Email">
+        <input type="password" id="password" value="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p id="login-status"></p>
+    </div>
+
+    <div class="card">
+        <h3>2. Fetch Authenticated User Details (Protected Route)</h3>
+        <button onclick="fetchUser()">Get User & Roles</button>
+        <pre id="user-info">No user fetched yet.</pre>
+    </div>
+
+    <script>
+        let authToken = '';
+
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const status = document.getElementById('login-status');
+            
+            status.textContent = 'Logging in...';
+            
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    authToken = data.access_token;
+                    status.innerHTML = '<span style="color: green;">Login Successful! Token received.</span>';
+                } else {
+                    status.innerHTML = `<span style="color: red;">Error: ${data.message}</span>`;
+                }
+            } catch (error) {
+                status.innerHTML = `<span style="color: red;">Network Error: ${error.message}</span>`;
+            }
+        }
+
+        async function fetchUser() {
+            const userInfo = document.getElementById('user-info');
+            
+            if (!authToken) {
+                userInfo.textContent = 'Please login first to get a token!';
+                return;
+            }
+            
+            userInfo.textContent = 'Fetching user info...';
+            
+            try {
+                const response = await fetch('/api/verify-auth', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                userInfo.textContent = JSON.stringify(data, null, 2);
+                
+            } catch (error) {
+                userInfo.textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
