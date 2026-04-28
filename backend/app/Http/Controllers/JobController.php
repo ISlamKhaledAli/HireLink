@@ -14,6 +14,25 @@ class JobController extends Controller
     {
         $query = Job::with(['category', 'user'])->where('status', 'approved');
 
+        if ($request->filled('keyword')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('title', 'like', '%'.$request->keyword.'%')
+                    ->orWhere('description', 'like', '%'.$request->keyword.'%');
+            });
+        }
+
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->filled('location')) {
+            $query->where('location', 'like', '%'.$request->location.'%');
+        }
+
+        if ($request->filled('work_type')) {
+            $query->where('work_type', $request->work_type);
+        }
+
         return JobResource::collection($query->paginate(15));
     }
 
