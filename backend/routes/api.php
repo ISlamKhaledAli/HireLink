@@ -1,23 +1,35 @@
 <?php
 
+use App\Http\Controllers\AdminJobController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\JobController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\AuthController;
-use Illuminate\Support\Facades\Auth;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::get('/jobs', [JobController::class, 'index']);
+Route::get('/jobs/{job}', [JobController::class, 'show']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::post('/logout', [AuthController::class, 'logout']);
-    
+
+    Route::post('/jobs', [JobController::class, 'store']);
+    Route::put('/jobs/{job}', [JobController::class, 'update']);
+    Route::delete('/jobs/{job}', [JobController::class, 'destroy']);
+
     Route::get('/verify-auth', function (Request $request) {
         return response()->json([
             'message' => 'Auth is working perfectly!',
             'user' => clone $request->user()->load('roles'),
-            'role_names' => $request->user()->getRoleNames()
+            'role_names' => $request->user()->getRoleNames(),
         ]);
     });
+});
+
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+    Route::post('/admin/jobs/{job}/approve', [AdminJobController::class, 'approve']);
+    Route::post('/admin/jobs/{job}/reject', [AdminJobController::class, 'reject']);
 });
