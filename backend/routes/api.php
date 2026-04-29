@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminJobController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\JobController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,12 @@ Route::middleware('auth:sanctum')->group(function () {
             'role_names' => $request->user()->getRoleNames(),
         ]);
     });
+
+    // Applications Module
+    Route::post('/applications', [ApplicationController::class, 'apply']);
+    Route::delete('/applications/{application}', [ApplicationController::class, 'cancel']);
+    Route::put('/applications/{application}', [ApplicationController::class, 'updateStatus']);
+    Route::get('/applications', [ApplicationController::class, 'index']);
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
