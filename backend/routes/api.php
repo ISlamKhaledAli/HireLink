@@ -41,6 +41,8 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
-    Route::post('/admin/jobs/{job}/approve', [AdminJobController::class, 'approve']);
-    Route::post('/admin/jobs/{job}/reject', [AdminJobController::class, 'reject']);
+     Route::post('/admin/jobs/{job}/approve', [AdminJobController::class, 'approve']);
+     Route::post('/admin/jobs/{job}/reject', [AdminJobController::class, 'reject']); 
+    
+     Route::get('/admin/dashboard', [AdminJobController::class, 'dashboard']);
 });
