@@ -25,7 +25,8 @@ class Job extends Model
         'description',
         'location',
         'work_type',
-        'salary_range',
+        'salary_min',
+        'salary_max',
         'deadline',
         'status',
     ];

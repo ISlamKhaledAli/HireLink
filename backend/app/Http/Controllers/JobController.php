@@ -21,19 +21,43 @@ class JobController extends Controller
             });
         }
 
-        if ($request->filled('category_id')) {
-            $query->where('category_id', $request->category_id);
+        // Support both 'category' and 'category_id' for robustness
+        if ($request->filled('category_id') || $request->filled('category')) {
+            $query->where('category_id', $request->category_id ?? $request->category);
         }
 
         if ($request->filled('location')) {
             $query->where('location', 'like', '%'.$request->location.'%');
         }
 
+        // Handle multiple work types (comma-separated string from frontend)
         if ($request->filled('work_type')) {
-            $query->where('work_type', $request->work_type);
+            $types = explode(',', $request->work_type);
+            $query->whereIn('work_type', $types);
         }
 
-        return JobResource::collection($query->paginate(15));
+        // Salary filtering
+        if ($request->filled('salary_min')) {
+            $query->where('salary_min', '>=', $request->salary_min);
+        }
+        if ($request->filled('salary_max')) {
+            $query->where('salary_max', '<=', $request->salary_max);
+        }
+
+        // Date posted filtering
+        if ($request->filled('date_posted')) {
+            $date = match($request->date_posted) {
+                'today' => now()->startOfDay(),
+                'week' => now()->subDays(7),
+                'month' => now()->subDays(30),
+                default => null
+            };
+            if ($date) {
+                $query->where('created_at', '>=', $date);
+            }
+        }
+
+        return JobResource::collection($query->latest()->paginate(15));
     }
 
     public function store(StoreJobRequest $request)

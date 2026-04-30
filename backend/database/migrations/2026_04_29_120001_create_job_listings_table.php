@@ -21,7 +21,8 @@ return new class extends Migration
             $table->text('description');
             $table->string('location');
             $table->enum('work_type', ['remote', 'onsite', 'hybrid']);
-            $table->string('salary_range')->nullable();
+            $table->unsignedBigInteger('salary_min')->nullable();
+            $table->unsignedBigInteger('salary_max')->nullable();
             $table->date('deadline');
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->timestamps();

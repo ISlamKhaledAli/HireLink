@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useJobStore } from '@/stores/jobStore'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
@@ -52,11 +52,19 @@ async function fetchCategories() {
   }
 }
 
-function search() {
-  const searchFilters = { ...filters.value }
-  if (Array.isArray(searchFilters.work_type)) {
-    searchFilters.work_type = searchFilters.work_type.join(',')
+function search(page = 1) {
+  const searchFilters = { 
+    ...filters.value,
+    page: page
   }
+  
+  // Format work_type as comma separated string for backend whereIn logic
+  if (Array.isArray(searchFilters.work_type) && searchFilters.work_type.length > 0) {
+    searchFilters.work_type = searchFilters.work_type.join(',')
+  } else {
+    delete searchFilters.work_type
+  }
+
   jobStore.fetchJobs(searchFilters)
 }
 
@@ -72,6 +80,16 @@ function clearFilters() {
   }
   jobStore.fetchJobs()
 }
+
+// Watch filters for automatic updates (Requirement 3: Reactivity)
+// We use a deep watch to catch changes in work_type array
+watch(
+  () => [filters.value.category, filters.value.work_type, filters.value.date_posted],
+  () => {
+    search()
+  },
+  { deep: true }
+)
 
 async function handleLogout() {
   await authStore.logout()
@@ -102,7 +120,7 @@ async function handleLogout() {
               :icon="Search" 
               placeholder="Search roles..." 
               rounded="rounded-full"
-              @keyup.enter="search"
+              @enter="search"
             />
           </div>
 
@@ -191,6 +209,7 @@ async function handleLogout() {
                   :icon="DollarSign" 
                   type="number" 
                   placeholder="Min" 
+                  @enter="search"
                 />
                 <span class="text-slate-300 font-bold">—</span>
                 <BaseInput 
@@ -198,6 +217,7 @@ async function handleLogout() {
                   :icon="DollarSign" 
                   type="number" 
                   placeholder="Max" 
+                  @enter="search"
                 />
               </div>
             </div>
@@ -225,7 +245,7 @@ async function handleLogout() {
                 <button 
                   v-for="d in [{val: 'today', label: 'Last 24 hours'}, {val: 'week', label: 'Last 7 days'}, {val: 'month', label: 'Last 30 days'}]" 
                   :key="d.val"
-                  @click="filters.date_posted = d.val"
+                  @click="filters.date_posted = filters.date_posted === d.val ? '' : d.val"
                   class="text-left px-4 py-3 text-xs font-bold transition-all rounded-xl border-2"
                   :class="filters.date_posted === d.val ? 'border-primary bg-primary/5 text-primary' : 'border-transparent bg-slate-50 text-slate-500 hover:bg-slate-100'"
                 >
@@ -257,7 +277,7 @@ async function handleLogout() {
                 </span>
               </template>
               <template v-else>
-                {{ jobStore.pagination.total || jobStore.jobs.length }} Opportunities
+                {{ jobStore.pagination?.total || jobStore.jobs.length }} Opportunities
               </template>
             </h1>
             <p class="text-slate-500 font-bold text-sm">Showing the latest positions available</p>
@@ -297,20 +317,29 @@ async function handleLogout() {
 
         <!-- Pagination -->
         <div v-if="jobStore.pagination && jobStore.pagination.last_page > 1" class="flex items-center justify-center gap-3 mt-10 py-6 border-t border-slate-200">
-          <button class="w-11 h-11 flex items-center justify-center rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-400 transition-all">
+          <button 
+            @click="search(jobStore.pagination.current_page - 1)"
+            :disabled="jobStore.pagination.current_page === 1"
+            class="w-11 h-11 flex items-center justify-center rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             <span class="material-symbols-outlined rotate-90">expand_more</span>
           </button>
           <div class="flex gap-2">
             <button 
               v-for="p in jobStore.pagination.last_page" 
               :key="p"
+              @click="search(p)"
               class="w-11 h-11 flex items-center justify-center rounded-xl font-black text-sm transition-all shadow-sm"
               :class="jobStore.pagination.current_page === p ? 'bg-primary text-white' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'"
             >
               {{ p }}
             </button>
           </div>
-          <button class="w-11 h-11 flex items-center justify-center rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-400 transition-all">
+          <button 
+            @click="search(jobStore.pagination.current_page + 1)"
+            :disabled="jobStore.pagination.current_page === jobStore.pagination.last_page"
+            class="w-11 h-11 flex items-center justify-center rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             <span class="material-symbols-outlined -rotate-90">expand_more</span>
           </button>
         </div>
