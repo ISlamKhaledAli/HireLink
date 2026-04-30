@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Application;
 use App\Models\Job;
+use App\Notifications\ApplicationStatusUpdated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ApplicationController extends Controller
 {
@@ -45,7 +47,6 @@ class ApplicationController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             'resume_path' => $resumePath,
-            'status' => 'pending',
         ]);
 
         return response()->json($application, 201);
@@ -56,10 +57,7 @@ class ApplicationController extends Controller
      */
     public function cancel(Application $application)
     {
-        // Auth: only the candidate who owns this application
-        if ($application->candidate_id != auth()->id()) {
-            abort(403, 'Unauthorized.');
-        }
+        Gate::authorize('cancel', $application);
 
         // Check status is still 'pending'
         if ($application->status !== 'pending') {
@@ -76,10 +74,7 @@ class ApplicationController extends Controller
      */
     public function updateStatus(Request $request, Application $application)
     {
-        // Auth: only the employer who owns the job
-        if ($application->job->user_id != auth()->id()) {
-            abort(403, 'Unauthorized.');
-        }
+        Gate::authorize('updateStatus', $application);
 
         $request->validate([
             'status' => 'required|in:accepted,rejected',
@@ -88,6 +83,8 @@ class ApplicationController extends Controller
         $application->update([
             'status' => $request->status,
         ]);
+
+        $application->candidate->notify(new ApplicationStatusUpdated($application));
 
         return response()->json($application, 200);
     }

@@ -18,7 +18,10 @@ class Application extends Model
         'resume_path',
         'phone',
         'email',
-        'status',
+    ];
+
+    protected $attributes = [
+        'status' => 'pending',
     ];
 
     public function job(): BelongsTo
