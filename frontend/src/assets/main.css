@@ -1,36 +1,54 @@
 @import "tailwindcss";
-@import "./base.css";
+
+@theme {
+  --color-primary: #022448;
+  --color-secondary: #9d4300;
+  --color-on-secondary: #ffffff;
+  --color-background: #FAFAFC;
+  --color-surface: #ffffff;
+  --color-outline-variant: #E5E7EB;
+  --color-on-surface-variant: #6B7280;
+  
+  --font-display: "Plus Jakarta Sans", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+/* Global Reset & Base Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  background-color: var(--color-background);
+  color: #0F172A;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+  width: 100%;
+  min-height: 100vh;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+/* Smooth Transitions — removed div and input to avoid interfering with transforms and padding */
+a, button {
+  transition: all 0.2s ease;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+/* Typography Helpers */
+.font-black { font-weight: 900; }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
 }
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+::-webkit-scrollbar-track {
+  background: #F8FAFC;
+}
+::-webkit-scrollbar-thumb {
+  background: #E2E8F0;
+  border-radius: 10px;
+  border: 3px solid #F8FAFC;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #CBD5E1;
 }
