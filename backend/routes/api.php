@@ -4,11 +4,15 @@ use App\Http\Controllers\AdminJobController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\Auth\LinkedInController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/auth/linkedin/redirect', [LinkedInController::class, 'redirect']);
+Route::get('/auth/linkedin/callback', [LinkedInController::class, 'callback']);
 
 Route::get('/jobs', [JobController::class, 'index']);
 Route::get('/jobs/{job}', [JobController::class, 'show']);
