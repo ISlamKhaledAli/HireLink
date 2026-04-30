@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HireLink Candidate Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface-variant": "#43474e",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#341f00",
+                        "tertiary-fixed-dim": "#edbf7f",
+                        "on-surface": "#1a1c1e",
+                        "surface-bright": "#faf9fc",
+                        "surface": "#faf9fc",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#1a1c1e",
+                        "on-secondary-fixed": "#341100",
+                        "on-primary-fixed-variant": "#2d486d",
+                        "surface-variant": "#e3e2e6",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#c69b5f",
+                        "on-primary-fixed": "#001c3b",
+                        "error": "#ba1a1a",
+                        "outline": "#74777f",
+                        "secondary": "#9d4300",
+                        "on-secondary-container": "#5c2400",
+                        "inverse-on-surface": "#f1f0f4",
+                        "inverse-surface": "#2f3033",
+                        "secondary-container": "#fd761a",
+                        "surface-tint": "#455f87",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#60410c",
+                        "surface-container-highest": "#e3e2e6",
+                        "surface-container": "#eeedf1",
+                        "surface-dim": "#dad9dd",
+                        "tertiary-container": "#503300",
+                        "secondary-fixed": "#ffdbca",
+                        "primary-fixed": "#d5e3ff",
+                        "tertiary-fixed": "#ffddb2",
+                        "inverse-primary": "#adc8f5",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-primary-container": "#8aa4cf",
+                        "primary-fixed-dim": "#adc8f5",
+                        "surface-container-low": "#f4f3f7",
+                        "background": "#faf9fc",
+                        "on-tertiary-fixed": "#291800",
+                        "secondary-fixed-dim": "#ffb690",
+                        "on-secondary-fixed-variant": "#783200",
+                        "primary-container": "#1e3a5f",
+                        "primary": "#022448",
+                        "outline-variant": "#c4c6cf",
+                        "surface-container-high": "#e9e7eb",
+                        "on-primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "container-max": "1280px",
+                        "sm": "0.75rem",
+                        "xs": "0.5rem",
+                        "xl": "2.5rem",
+                        "md": "1rem",
+                        "lg": "1.5rem",
+                        "gutter": "1.5rem"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h1": ["Plus Jakarta Sans"],
+                        "label-sm": ["Inter"],
+                        "h3": ["Plus Jakarta Sans"],
+                        "h2": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"],
+                        "display": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h1": ["32px", {"lineHeight": "1.25", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "h3": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "h2": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "display": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #faf9fc;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-background antialiased">
+<!-- Sidebar Navigation -->
+<aside class="h-screen w-64 fixed left-0 top-0 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col z-40">
+<div class="text-xl font-bold text-blue-900 dark:text-white px-4 py-6">
+            HireLink
+        </div>
+<nav class="flex flex-col h-full space-y-1">
+<a class="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/20 text-blue-900 dark:text-blue-400 border-r-4 border-blue-900 dark:border-blue-400 px-4 py-3 font-semibold font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Overview
+            </a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition-transform duration-200 group font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" data-icon="work">work</span>
+                My Applications
+            </a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition-transform duration-200 group font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" data-icon="mail">mail</span>
+                Messages
+            </a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition-transform duration-200 group font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" data-icon="person">person</span>
+                Profile
+            </a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition-transform duration-200 group font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" data-icon="settings">settings</span>
+                Settings
+            </a>
+<div class="mt-auto px-4 pb-8">
+<div class="bg-primary-container p-4 rounded-xl text-white">
+<p class="font-label-md text-label-md mb-2">Alex Thompson</p>
+<p class="text-on-primary-container text-label-sm font-label-sm mb-4">Product Designer</p>
+<button class="w-full bg-secondary text-white py-2 rounded-lg font-label-md text-label-md hover:bg-secondary-container transition-colors">
+                        Upgrade to Pro
+                    </button>
+</div>
+</div>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- Header -->
+<header class="sticky top-0 bg-white/95 backdrop-blur-md z-30 border-b border-slate-200 px-8 py-4 flex justify-between items-center">
+<h1 class="font-h2 text-h2 text-primary">Candidate Dashboard</h1>
+<div class="flex items-center gap-6">
+<div class="relative">
+<input class="pl-10 pr-4 py-2 border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:outline-none w-64 text-label-md bg-surface-container-low" placeholder="Search jobs, companies..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-slate-400" data-icon="search">search</span>
+</div>
+<button class="relative text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-secondary rounded-full"></span>
+</button>
+<img alt="Alex Thompson" class="w-10 h-10 rounded-full border-2 border-primary-container object-cover" data-alt="Close-up professional portrait of a man with a friendly expression in a modern office setting, soft professional lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2UNZienXRL2Rw6Fyq3nTYGTkxvRqpBXxuzKRHLPP8nbIuxuScu1wYW-_y3eT5wbJi1h67TLjtF_vohnLqhyJ0SWsnTBg9Y5pbyRwh_nQ4wxrI_XvOkXHCHtbEBphkfgl3nUGdOVxPy0jy6ngTo6FQXhOZij9Bx0j9aV8ict55w6mvlH4mNgw2W2qtpnWmp1xnW2F8yPXk-02o6XAg1uNffarJ1V0fCoCpdgF_EI99W1Hx4UVcf4x2862MeZGH151Zoiw7ubvnAic"/>
+</div>
+</header>
+<div class="max-w-7xl mx-auto p-8 space-y-8">
+<!-- Top Section: Welcome & Progress -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between">
+<div>
+<h2 class="font-h3 text-h3 text-primary mb-2">Welcome back, Alex!</h2>
+<p class="text-on-surface-variant font-body-sm text-body-sm">You have 3 new job matches based on your profile.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-6 py-2.5 bg-secondary text-white rounded-lg font-label-md text-label-md hover:shadow-lg transition-all active:scale-95 transform">
+                            Post a Job
+                        </button>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-label-md text-label-md text-primary">Profile Completion</h3>
+<span class="text-secondary font-label-md text-label-md">85%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2.5 mb-4">
+<div class="bg-secondary h-2.5 rounded-full" style="width: 85%"></div>
+</div>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Add your portfolio link to reach 100% and get noticed 2x faster.</p>
+</div>
+</div>
+<!-- Overview Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Card 1 -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 group hover:border-secondary transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-blue-50 text-blue-900 rounded-lg">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+</div>
+<span class="text-green-600 text-label-sm font-label-sm bg-green-50 px-2 py-1 rounded-full">+12%</span>
+</div>
+<p class="text-on-surface-variant font-label-md text-label-md mb-1">Applications Sent</p>
+<h4 class="font-h2 text-h2 text-primary">24</h4>
+</div>
+<!-- Card 2 -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 group hover:border-secondary transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-orange-50 text-orange-600 rounded-lg">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+</div>
+<span class="text-blue-600 text-label-sm font-label-sm bg-blue-50 px-2 py-1 rounded-full">Active</span>
+</div>
+<p class="text-on-surface-variant font-label-md text-label-md mb-1">Interviews</p>
+<h4 class="font-h2 text-h2 text-primary">06</h4>
+</div>
+<!-- Card 3 -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 group hover:border-secondary transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-purple-50 text-purple-600 rounded-lg">
+<span class="material-symbols-outlined" data-icon="bookmark">bookmark</span>
+</div>
+</div>
+<p class="text-on-surface-variant font-label-md text-label-md mb-1">Saved Jobs</p>
+<h4 class="font-h2 text-h2 text-primary">18</h4>
+</div>
+<!-- Card 4 -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 group hover:border-secondary transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-green-50 text-green-600 rounded-lg">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</div>
+<span class="text-green-600 text-label-sm font-label-sm bg-green-50 px-2 py-1 rounded-full">+24</span>
+</div>
+<p class="text-on-surface-variant font-label-md text-label-md mb-1">Profile Views</p>
+<h4 class="font-h2 text-h2 text-primary">152</h4>
+</div>
+</div>
+<!-- Recent Applications Table Section -->
+<div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+<div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center">
+<h3 class="font-h3 text-h3 text-primary">Recent Applications</h3>
+<button class="text-secondary font-label-md text-label-md hover:underline">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">
+<tr>
+<th class="px-6 py-4">Job Title</th>
+<th class="px-6 py-4">Company</th>
+<th class="px-6 py-4">Date Applied</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-6 py-4">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 font-body-sm text-body-sm">
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 font-semibold text-primary">Senior UI/UX Designer</td>
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center font-bold text-xs">A</div>
+                                    Adobe Systems
+                                </td>
+<td class="px-6 py-4 text-on-surface-variant">Oct 12, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">Pending</span>
+</td>
+<td class="px-6 py-4">
+<button class="text-slate-400 hover:text-primary"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 font-semibold text-primary">Product Lead</td>
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center font-bold text-xs">S</div>
+                                    Spotify
+                                </td>
+<td class="px-6 py-4 text-on-surface-variant">Oct 10, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-semibold">Accepted</span>
+</td>
+<td class="px-6 py-4">
+<button class="text-slate-400 hover:text-primary"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 font-semibold text-primary">Interface Specialist</td>
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center font-bold text-xs">F</div>
+                                    Figma Inc.
+                                </td>
+<td class="px-6 py-4 text-on-surface-variant">Oct 05, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-red-50 text-red-700 text-xs font-semibold">Rejected</span>
+</td>
+<td class="px-6 py-4">
+<button class="text-slate-400 hover:text-primary"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 font-semibold text-primary">Visual Designer</td>
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center font-bold text-xs">G</div>
+                                    Google
+                                </td>
+<td class="px-6 py-4 text-on-surface-variant">Sep 28, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">Pending</span>
+</td>
+<td class="px-6 py-4">
+<button class="text-slate-400 hover:text-primary"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Footer-like Support Section -->
+<footer class="w-full mt-auto py-12 border-t border-slate-200 bg-slate-50">
+<div class="max-w-7xl mx-auto px-6 lg:flex lg:justify-between items-start">
+<div class="mb-8 lg:mb-0">
+<div class="text-lg font-bold text-blue-900 mb-4">HireLink</div>
+<p class="text-slate-500 font-label-sm text-label-sm max-w-xs">
+                            © 2024 HireLink Ecosystem. Empowering careers globally through advanced connectivity.
+                        </p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+<div>
+<h4 class="text-primary font-label-md text-label-md mb-4">Company</h4>
+<ul class="space-y-2">
+<li><a class="text-slate-500 hover:text-blue-900 transition-colors font-label-sm text-label-sm" href="#">About Us</a></li>
+<li><a class="text-slate-500 hover:text-blue-900 transition-colors font-label-sm text-label-sm" href="#">Careers</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-primary font-label-md text-label-md mb-4">Legal</h4>
+<ul class="space-y-2">
+<li><a class="text-slate-500 hover:text-blue-900 transition-colors font-label-sm text-label-sm" href="#">Privacy</a></li>
+<li><a class="text-slate-500 hover:text-blue-900 transition-colors font-label-sm text-label-sm" href="#">Terms</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-primary font-label-md text-label-md mb-4">Help</h4>
+<ul class="space-y-2">
+<li><a class="text-slate-500 hover:text-blue-900 transition-colors font-label-sm text-label-sm" href="#">Support</a></li>
+</ul>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</main>
+<!-- Floating Action Button for Dashboard Context -->
+<button class="fixed bottom-8 right-8 bg-secondary text-white p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all z-50 flex items-center gap-2 group">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 font-label-md text-label-md whitespace-nowrap">Find New Jobs</span>
+</button>
+</body></html>
