@@ -21,6 +21,10 @@ const props = defineProps({
   rounded: {
     type: String,
     default: 'rounded-xl'
+  },
+  disabled: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -44,6 +48,7 @@ const inputStyle = computed(() => ({
     <input
       :type="type"
       :value="modelValue"
+      :disabled="disabled"
       @input="emit('update:modelValue', $event.target.value)"
       @keyup.enter="emit('enter')"
       :placeholder="placeholder"
@@ -101,9 +106,8 @@ const inputStyle = computed(() => ({
   font-weight: 500;
 }
 
-.base-input-field:focus {
-  background-color: #ffffff;
-  border-color: #3b82f6 !important; /* Override the global !important */
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important; /* Override the global !important */
+.base-input-field:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 </style>

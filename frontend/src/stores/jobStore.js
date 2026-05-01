@@ -1,7 +1,17 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import api from '@/services/api'
-import { getMyJobs } from '@/services/jobs'
+import { getMyJobs, createJob as postJobRequest } from '@/services/jobs'
+
+function mapValidationErrors(responseData) {
+  const bag = responseData?.errors
+  if (!bag || typeof bag !== 'object') return {}
+  const out = {}
+  for (const [key, val] of Object.entries(bag)) {
+    out[key] = Array.isArray(val) ? val[0] : String(val)
+  }
+  return out
+}
 
 export const useJobStore = defineStore('jobs', () => {
   const jobs = ref([])
@@ -13,6 +23,9 @@ export const useJobStore = defineStore('jobs', () => {
   const myJobsLoading = ref(false)
   const myJobsError = ref(null)
   const myJobsPagination = ref({})
+
+  const creating = ref(false)
+  const createFieldErrors = ref({})
 
   async function fetchJobs(filters = {}) {
     loading.value = true
@@ -44,6 +57,35 @@ export const useJobStore = defineStore('jobs', () => {
     }
   }
 
+  function clearCreateFieldErrors() {
+    createFieldErrors.value = {}
+  }
+
+  /**
+   * @returns {Promise<object>} created job resource from API `data`
+   */
+  async function createJob(payload) {
+    creating.value = true
+    createFieldErrors.value = {}
+    try {
+      const response = await postJobRequest(payload)
+      const created = response.data?.data
+      try {
+        await fetchMyJobs()
+      } catch (e) {
+        console.error('Refresh my jobs after create:', e)
+      }
+      return created
+    } catch (err) {
+      if (err.response?.status === 422) {
+        createFieldErrors.value = mapValidationErrors(err.response.data)
+      }
+      throw err
+    } finally {
+      creating.value = false
+    }
+  }
+
   return {
     jobs,
     loading,
@@ -54,6 +96,10 @@ export const useJobStore = defineStore('jobs', () => {
     myJobsLoading,
     myJobsError,
     myJobsPagination,
-    fetchMyJobs
+    fetchMyJobs,
+    creating,
+    createFieldErrors,
+    clearCreateFieldErrors,
+    createJob
   }
 })

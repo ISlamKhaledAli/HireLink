@@ -17,7 +17,7 @@ const routes = [
   {
     path: '/employer/jobs/new',
     name: 'employer-jobs-new',
-    component: () => import('@/views/employer/EmployerHubView.vue'),
+    component: () => import('@/views/employer/PostJobView.vue'),
     meta: { requiresAuth: true, requiresEmployer: true, title: 'Post a job' }
   },
   { path: '/', component: Dashboard, meta: { requiresAuth: true, title: 'Dashboard' } }
