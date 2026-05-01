@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models;
-
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -47,4 +46,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Application::class, 'candidate_id');
     }
+    public function comments()
+  {
+    return $this->hasMany(Comment::class);
+   }
 }

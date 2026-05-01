@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AdminJobController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ApplicationController;
@@ -45,4 +45,11 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
      Route::post('/admin/jobs/{job}/reject', [AdminJobController::class, 'reject']); 
     
      Route::get('/admin/dashboard', [AdminJobController::class, 'dashboard']);
+});
+
+Route::get('/jobs/{job}/comments', [CommentController::class, 'index']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/comments', [CommentController::class, 'store']);
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
 });
