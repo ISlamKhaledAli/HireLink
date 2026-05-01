@@ -11,8 +11,14 @@ const routes = [
   {
     path: '/employer/jobs',
     name: 'employer-jobs',
-    component: () => import('@/views/employer/EmployerHubView.vue'),
+    component: () => import('@/views/employer/ManageJobsView.vue'),
     meta: { requiresAuth: true, requiresEmployer: true, title: 'My jobs' }
+  },
+  {
+    path: '/employer/jobs/:jobId/applications',
+    name: 'employer-job-applications',
+    component: () => import('@/views/employer/JobApplicationsView.vue'),
+    meta: { requiresAuth: true, requiresEmployer: true, title: 'Applications' }
   },
   {
     path: '/employer/jobs/new',

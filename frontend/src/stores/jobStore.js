@@ -1,7 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import api from '@/services/api'
-import { getMyJobs, createJob as postJobRequest } from '@/services/jobs'
+import {
+  getMyJobs,
+  createJob as postJobRequest,
+  updateJob as putJobRequest,
+  deleteJob as deleteJobRequest
+} from '@/services/jobs'
 
 function mapValidationErrors(responseData) {
   const bag = responseData?.errors
@@ -26,6 +31,10 @@ export const useJobStore = defineStore('jobs', () => {
 
   const creating = ref(false)
   const createFieldErrors = ref({})
+
+  const updatingJobId = ref(null)
+  const deletingJobId = ref(null)
+  const editFieldErrors = ref({})
 
   async function fetchJobs(filters = {}) {
     loading.value = true
@@ -61,6 +70,10 @@ export const useJobStore = defineStore('jobs', () => {
     createFieldErrors.value = {}
   }
 
+  function clearEditFieldErrors() {
+    editFieldErrors.value = {}
+  }
+
   /**
    * @returns {Promise<object>} created job resource from API `data`
    */
@@ -86,6 +99,30 @@ export const useJobStore = defineStore('jobs', () => {
     }
   }
 
+  async function updateJob(id, payload) {
+    updatingJobId.value = id
+    editFieldErrors.value = {}
+    try {
+      await putJobRequest(id, payload)
+    } catch (err) {
+      if (err.response?.status === 422) {
+        editFieldErrors.value = mapValidationErrors(err.response.data)
+      }
+      throw err
+    } finally {
+      updatingJobId.value = null
+    }
+  }
+
+  async function deleteJob(id) {
+    deletingJobId.value = id
+    try {
+      await deleteJobRequest(id)
+    } finally {
+      deletingJobId.value = null
+    }
+  }
+
   return {
     jobs,
     loading,
@@ -100,6 +137,12 @@ export const useJobStore = defineStore('jobs', () => {
     creating,
     createFieldErrors,
     clearCreateFieldErrors,
-    createJob
+    createJob,
+    updatingJobId,
+    deletingJobId,
+    editFieldErrors,
+    clearEditFieldErrors,
+    updateJob,
+    deleteJob
   }
 })

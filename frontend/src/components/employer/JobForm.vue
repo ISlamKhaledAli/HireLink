@@ -22,12 +22,20 @@ defineProps({
   minDeadline: {
     type: String,
     required: true
+  },
+  submitLabel: {
+    type: String,
+    default: 'Publish listing'
+  },
+  useEmitCancel: {
+    type: Boolean,
+    default: false
   }
 })
 
 const form = defineModel('form', { required: true })
 
-const emit = defineEmits(['submit'])
+const emit = defineEmits(['submit', 'cancel'])
 
 function fieldClass(err) {
   return err ? 'ring-2 ring-red-200 border-red-300' : ''
@@ -183,9 +191,19 @@ function fieldClass(err) {
         :disabled="disabled || categoriesLoading || !categories.length"
         class="bg-primary text-white px-8 py-3.5 rounded-xl font-black text-sm shadow-lg shadow-primary/20 hover:opacity-95 active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none"
       >
-        Publish listing
+        {{ submitLabel }}
+      </button>
+      <button
+        v-if="useEmitCancel"
+        type="button"
+        class="text-sm font-bold text-slate-500 hover:text-primary transition-colors"
+        :disabled="disabled"
+        @click="emit('cancel')"
+      >
+        Cancel
       </button>
       <router-link
+        v-else
         :to="{ name: 'employer-jobs' }"
         class="text-sm font-bold text-slate-500 hover:text-primary transition-colors"
       >
