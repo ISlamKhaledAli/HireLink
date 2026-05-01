@@ -10,6 +10,21 @@ use Illuminate\Support\Facades\Gate;
 
 class JobController extends Controller
 {
+    /**
+     * Paginated job listings for the authenticated employer (all statuses).
+     */
+    public function mine(Request $request)
+    {
+        if (! $request->user()->hasRole('employer')) {
+            abort(403, 'Only employers can view their job listings.');
+        }
+
+        $query = Job::with(['category', 'user'])
+            ->where('user_id', $request->user()->id());
+
+        return JobResource::collection($query->paginate(15));
+    }
+
     public function index(Request $request)
     {
         $query = Job::with(['category', 'user'])->where('status', 'approved');

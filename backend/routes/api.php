@@ -1,10 +1,11 @@
 <?php
 
 use App\Http\Controllers\AdminJobController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ApplicationController;
-use App\Http\Controllers\JobController;
 use App\Http\Controllers\Auth\LinkedInController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\JobController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,10 +17,13 @@ Route::get('/auth/linkedin/callback', [LinkedInController::class, 'callback']);
 
 Route::get('/jobs', [JobController::class, 'index']);
 Route::get('/jobs/{job}', [JobController::class, 'show']);
+Route::get('/categories', [CategoryController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::get('/employer/jobs', [JobController::class, 'mine']);
 
     Route::post('/jobs', [JobController::class, 'store']);
     Route::put('/jobs/{job}', [JobController::class, 'update']);
@@ -41,8 +45,8 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
-     Route::post('/admin/jobs/{job}/approve', [AdminJobController::class, 'approve']);
-     Route::post('/admin/jobs/{job}/reject', [AdminJobController::class, 'reject']); 
-    
-     Route::get('/admin/dashboard', [AdminJobController::class, 'dashboard']);
+    Route::post('/admin/jobs/{job}/approve', [AdminJobController::class, 'approve']);
+    Route::post('/admin/jobs/{job}/reject', [AdminJobController::class, 'reject']);
+
+    Route::get('/admin/dashboard', [AdminJobController::class, 'dashboard']);
 });
