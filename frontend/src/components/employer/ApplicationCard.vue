@@ -1,11 +1,28 @@
 <script setup>
-defineProps({
+import { computed } from 'vue'
+import { Loader2 } from 'lucide-vue-next'
+import { useApplicationsStore } from '@/stores/applications'
+
+const props = defineProps({
   /** Raw application row from GET /applications */
   application: {
     type: Object,
     required: true
   }
 })
+
+const applicationsStore = useApplicationsStore()
+
+const updating = computed(() => applicationsStore.isUpdating(props.application.id))
+const statusError = computed(() => applicationsStore.statusErrorFor(props.application.id))
+
+function accept() {
+  applicationsStore.setStatus(props.application.id, 'accepted')
+}
+
+function reject() {
+  applicationsStore.setStatus(props.application.id, 'rejected')
+}
 
 function statusBadgeClass(status) {
   const map = {
@@ -51,8 +68,42 @@ function displayName(application) {
         {{ application.status }}
       </span>
     </div>
-    <div v-if="$slots.actions" class="mt-4 flex flex-wrap gap-2 border-t border-slate-100 pt-4">
-      <slot name="actions" />
+
+    <div
+      v-if="application.status === 'pending'"
+      class="mt-4 border-t border-slate-100 pt-4"
+      :aria-busy="updating"
+    >
+      <p
+        v-if="statusError"
+        class="mb-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-800"
+        role="alert"
+      >
+        {{ statusError }}
+      </p>
+      <div class="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          class="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-600 px-4 py-2 text-sm font-black text-white shadow-sm hover:bg-emerald-700 disabled:pointer-events-none disabled:opacity-50"
+          :disabled="updating"
+          @click="accept"
+        >
+          Accept
+        </button>
+        <button
+          type="button"
+          class="inline-flex items-center justify-center gap-2 rounded-xl border border-red-200 bg-white px-4 py-2 text-sm font-black text-red-700 shadow-sm hover:bg-red-50 disabled:pointer-events-none disabled:opacity-50"
+          :disabled="updating"
+          @click="reject"
+        >
+          Reject
+        </button>
+        <Loader2
+          v-if="updating"
+          class="h-5 w-5 animate-spin text-primary"
+          aria-label="Updating status"
+        />
+      </div>
     </div>
   </article>
 </template>
