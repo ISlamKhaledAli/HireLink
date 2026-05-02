@@ -7,6 +7,8 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\Auth\LinkedInController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\AnalyticsController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -16,6 +18,9 @@ Route::get('/auth/linkedin/callback', [LinkedInController::class, 'callback']);
 
 Route::get('/jobs', [JobController::class, 'index']);
 Route::get('/jobs/{job}', [JobController::class, 'show']);
+
+Route::post('/payments/webhook', [PaymentController::class, 'webhook']);
+Route::post('/jobs/{job}/view', [AnalyticsController::class, 'recordView']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
@@ -42,8 +47,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
      Route::post('/admin/jobs/{job}/approve', [AdminJobController::class, 'approve']);
-     Route::post('/admin/jobs/{job}/reject', [AdminJobController::class, 'reject']); 
-    
+     Route::post('/admin/jobs/{job}/reject', [AdminJobController::class, 'reject']);
+
      Route::get('/admin/dashboard', [AdminJobController::class, 'dashboard']);
 });
 
@@ -52,4 +57,11 @@ Route::get('/jobs/{job}/comments', [CommentController::class, 'index']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/comments', [CommentController::class, 'store']);
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
+});
+
+Route::middleware(['auth:sanctum', 'employer'])->group(function () {
+    Route::post('/payments/initiate/{application}', [PaymentController::class, 'initiate']);
+    Route::get('/payments/{application}', [PaymentController::class, 'status']);
+
+    Route::get('/jobs/{job}/analytics', [AnalyticsController::class, 'analytics']);
 });
