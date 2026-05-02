@@ -52,7 +52,12 @@ class Job extends Model
         return $this->hasMany(Application::class);
     }
     public function comments()
-{
-    return $this->hasMany(Comment::class);
-}
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function views(): HasMany
+    {
+        return $this->hasMany(JobView::class, 'job_id');
+    }
 }
