@@ -59,7 +59,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
 });
 
-Route::middleware(['auth:sanctum', 'employer'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/payments/initiate/{application}', [PaymentController::class, 'initiate']);
     Route::get('/payments/{application}', [PaymentController::class, 'status']);
 
