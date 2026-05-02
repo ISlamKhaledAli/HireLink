@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('applications', function (Blueprint $table) {
-            //
+            $table->boolean('is_paid')->default(false)->after('status');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('applications', function (Blueprint $table) {
-            $table->boolean('is_paid')->default(false)->after('status');
+            $table->dropColumn('is_paid');
         });
     }
 };
