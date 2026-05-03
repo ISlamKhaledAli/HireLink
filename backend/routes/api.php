@@ -1,10 +1,11 @@
 <?php
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AdminJobController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ApplicationController;
-use App\Http\Controllers\JobController;
 use App\Http\Controllers\Auth\LinkedInController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\JobController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaymentController;
@@ -19,6 +20,7 @@ Route::get('/auth/linkedin/callback', [LinkedInController::class, 'callback']);
 
 Route::get('/jobs', [JobController::class, 'index']);
 Route::get('/jobs/{job}', [JobController::class, 'show']);
+Route::get('/categories', [CategoryController::class, 'index']);
 
 Route::post('/payments/webhook', [PaymentController::class, 'webhook']);
 Route::post('/jobs/{job}/view', [AnalyticsController::class, 'recordView']);
@@ -26,6 +28,8 @@ Route::post('/jobs/{job}/view', [AnalyticsController::class, 'recordView']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::get('/employer/jobs', [JobController::class, 'mine']);
 
     Route::patch('/user/profile', [ProfileController::class, 'update']);
 

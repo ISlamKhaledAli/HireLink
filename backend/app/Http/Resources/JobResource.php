@@ -14,6 +14,7 @@ class JobResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'category_id' => $this->category_id,
             'title' => $this->title,
             'description' => $this->description,
             'category' => $this->whenLoaded('category', fn () => $this->category->name),

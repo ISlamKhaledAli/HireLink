@@ -46,6 +46,24 @@ const routes = [
     component: AdminJobsView,
     meta: { requiresAuth: true, role: "admin", title: "Manage Jobs" },
   },
+  {
+    path: '/employer/jobs',
+    name: 'employer-jobs',
+    component: () => import('@/views/employer/ManageJobsView.vue'),
+    meta: { requiresAuth: true, requiresEmployer: true, title: 'My jobs' }
+  },
+  {
+    path: '/employer/jobs/:jobId/applications',
+    name: 'employer-job-applications',
+    component: () => import('@/views/employer/JobApplicationsView.vue'),
+    meta: { requiresAuth: true, requiresEmployer: true, title: 'Applications' }
+  },
+  {
+    path: '/employer/jobs/new',
+    name: 'employer-jobs-new',
+    component: () => import('@/views/employer/PostJobView.vue'),
+    meta: { requiresAuth: true, requiresEmployer: true, title: 'Post a job' }
+  },
 ];
 
 const router = createRouter({
@@ -62,6 +80,17 @@ router.beforeEach(async (to, from, next) => {
 
   if (to.meta.requiresAuth && !auth.token) {
     return next('/login')
+  }
+
+  if (to.meta.requiresEmployer) {
+    const names = auth.roles || []
+    const isEmployer =
+      names.includes('employer') ||
+      (Array.isArray(auth.user?.roles) &&
+        auth.user.roles.some((r) => (typeof r === 'string' ? r : r?.name) === 'employer'))
+    if (!isEmployer) {
+      return next('/')
+    }
   }
 
   if (to.meta.role && !auth.roles.includes(to.meta.role)) {
