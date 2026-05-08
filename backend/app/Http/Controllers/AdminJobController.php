@@ -51,16 +51,40 @@ class AdminJobController extends Controller
     }
 
     
-public function dashboard()
-{
-    return response()->json([
-        'total_users' => User::count(),
-        'total_jobs' => Job::count(),
-        'pending_jobs' => Job::where('status', 'pending')->count(),
-        'approved_jobs' => Job::where('status', 'approved')->count(),
-        'rejected_jobs' => Job::where('status', 'rejected')->count(),
-    ]);
-}
+    public function dashboard()
+    {
+        return response()->json([
+            'total_users' => User::count(),
+            'total_jobs' => Job::count(),
+            'pending_jobs' => Job::where('status', 'pending')->count(),
+            'approved_jobs' => Job::where('status', 'approved')->count(),
+            'rejected_jobs' => Job::where('status', 'rejected')->count(),
+        ]);
+    }
 
+    public function pending()
+    {
+        $jobs = Job::with('user', 'category')->where('status', 'pending')->latest()->paginate(10);
+        return response()->json($jobs);
+    }
 
+    public function pendingCompanies()
+    {
+        $companies = User::role('employer')->where('status', 'pending')->latest()->paginate(10);
+        return response()->json($companies);
+    }
+
+    public function approveCompany(User $user)
+    {
+        if (!$user->hasRole('employer')) {
+            abort(403, 'User is not an employer.');
+        }
+
+        $user->update(['status' => 'approved']);
+
+        return response()->json([
+            'message' => 'Company approved successfully',
+            'user' => $user
+        ]);
+    }
 }

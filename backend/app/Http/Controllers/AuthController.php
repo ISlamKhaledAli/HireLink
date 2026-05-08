@@ -18,10 +18,13 @@ class AuthController extends Controller
             'role' => 'required|string|in:candidate,employer',
         ]);
 
+        $status = $request->role === 'employer' ? 'pending' : 'approved';
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'status' => $status,
         ]);
 
         $user->assignRole($request->role);

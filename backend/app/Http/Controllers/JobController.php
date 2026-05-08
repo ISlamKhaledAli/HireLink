@@ -20,7 +20,7 @@ class JobController extends Controller
         }
 
         $query = Job::with(['category', 'user'])
-            ->where('user_id', $request->user()->id());
+            ->where('user_id', $request->user()->id);
 
         return JobResource::collection($query->paginate(15));
     }
@@ -64,7 +64,7 @@ class JobController extends Controller
             abort(403, 'Unauthorized access to this job listing.');
         }
 
-        return new JobResource($job->load(['category', 'user']));
+        return new JobResource($job->loadCount('applications')->load(['category', 'user']));
     }
 
     public function update(StoreJobRequest $request, Job $job)

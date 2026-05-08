@@ -22,6 +22,18 @@ Route::get('/jobs', [JobController::class, 'index']);
 Route::get('/jobs/{job}', [JobController::class, 'show']);
 Route::get('/categories', [CategoryController::class, 'index']);
 
+Route::get('/companies', function () {
+    return \App\Models\User::role('employer')->withCount('jobs')->get()->map(function($user) {
+        return [
+            'id' => $user->id,
+            'name' => $user->name,
+            'jobs_count' => $user->jobs_count,
+            'location' => 'Global', // Placeholder
+            'industry' => 'Technology' // Placeholder
+        ];
+    });
+});
+
 Route::post('/payments/webhook', [PaymentController::class, 'webhook']);
 Route::post('/jobs/{job}/view', [AnalyticsController::class, 'recordView']);
 
@@ -49,12 +61,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/applications', [ApplicationController::class, 'apply']);
     Route::delete('/applications/{application}', [ApplicationController::class, 'cancel']);
     Route::put('/applications/{application}', [ApplicationController::class, 'updateStatus']);
+    Route::get('/applications/{application}/resume', [ApplicationController::class, 'downloadResume']);
     Route::get('/applications', [ApplicationController::class, 'index']);
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+     Route::get('/admin/jobs/pending', [AdminJobController::class, 'pending']);
      Route::post('/admin/jobs/{job}/approve', [AdminJobController::class, 'approve']);
      Route::post('/admin/jobs/{job}/reject', [AdminJobController::class, 'reject']);
+
+     Route::get('/admin/companies/pending', [AdminJobController::class, 'pendingCompanies']);
+     Route::post('/admin/companies/{user}/approve', [AdminJobController::class, 'approveCompany']);
 
      Route::get('/admin/dashboard', [AdminJobController::class, 'dashboard']);
 });

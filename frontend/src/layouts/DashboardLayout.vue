@@ -5,6 +5,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { 
   LayoutDashboard, 
   Briefcase, 
+  Building2,
   User as UserIcon, 
   Settings,
   ShieldCheck,
@@ -53,6 +54,16 @@ const handleLogout = async () => {
             :class="isActive('/admin/jobs') ? 'bg-blue-50 text-blue-900 border-r-4 border-blue-900' : 'text-slate-500 hover:bg-slate-50'">
             <Briefcase class="w-5 h-5" /> Manage Jobs
           </router-link>
+
+          <router-link to="/admin/companies" class="flex items-center gap-3 px-6 py-3 font-bold text-sm transition-colors duration-200"
+            :class="isActive('/admin/companies') ? 'bg-blue-50 text-blue-900 border-r-4 border-blue-900' : 'text-slate-500 hover:bg-slate-50'">
+            <Building2 class="w-5 h-5" /> Manage Companies
+          </router-link>
+          
+          <router-link to="/admin/applications" class="flex items-center gap-3 px-6 py-3 font-bold text-sm transition-colors duration-200"
+            :class="isActive('/admin/applications') ? 'bg-blue-50 text-blue-900 border-r-4 border-blue-900' : 'text-slate-500 hover:bg-slate-50'">
+            <ShieldCheck class="w-5 h-5" /> All Applications
+          </router-link>
         </template>
 
         <!-- 🔹 روابط الـ Candidate -->
@@ -63,18 +74,20 @@ const handleLogout = async () => {
           </router-link>
         </template>
 
-        <!-- 🔹 روابط مشتركة (للجميع) -->
-        <div class="my-4 border-t border-slate-100 mx-4"></div>
+        <!-- 🔹 روابط مشتركة (لغير الأدمن) -->
+        <template v-if="!isAdmin">
+          <div class="my-4 border-t border-slate-100 mx-4"></div>
 
-        <router-link to="/jobs" class="flex items-center gap-3 px-6 py-3 font-bold text-sm transition-colors duration-200"
-          :class="isActive('/jobs') ? 'bg-emerald-50 text-emerald-700 border-r-4 border-emerald-500' : 'text-slate-500 hover:bg-slate-50'">
-          <Search class="w-5 h-5" /> Find Jobs
-        </router-link>
+          <router-link to="/jobs" class="flex items-center gap-3 px-6 py-3 font-bold text-sm transition-colors duration-200"
+            :class="isActive('/jobs') ? 'bg-emerald-50 text-emerald-700 border-r-4 border-emerald-500' : 'text-slate-500 hover:bg-slate-50'">
+            <Search class="w-5 h-5" /> Find Jobs
+          </router-link>
 
-        <router-link to="/profile" class="flex items-center gap-3 px-6 py-3 font-bold text-sm transition-colors duration-200"
-          :class="isActive('/profile') ? 'bg-purple-50 text-purple-700 border-r-4 border-purple-500' : 'text-slate-500 hover:bg-slate-50'">
-          <UserIcon class="w-5 h-5" /> Profile Settings
-        </router-link>
+          <router-link to="/profile" class="flex items-center gap-3 px-6 py-3 font-bold text-sm transition-colors duration-200"
+            :class="isActive('/profile') ? 'bg-purple-50 text-purple-700 border-r-4 border-purple-500' : 'text-slate-500 hover:bg-slate-50'">
+            <UserIcon class="w-5 h-5" /> Profile Settings
+          </router-link>
+        </template>
       </nav>
       
       <!-- User Profile Snippet in Sidebar -->

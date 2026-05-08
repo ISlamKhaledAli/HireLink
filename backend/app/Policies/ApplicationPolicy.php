@@ -77,6 +77,6 @@ class ApplicationPolicy
      */
     public function updateStatus(User $user, Application $application): bool
     {
-        return $user->id === $application->job->user_id;
+        return $user->hasRole('admin') || $user->id === $application->job->user_id;
     }
 }

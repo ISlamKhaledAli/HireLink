@@ -89,8 +89,8 @@ async function handleLogout() {
           <router-link to="/" class="text-2xl font-black tracking-tight text-primary hover:opacity-80 transition-all">HireLink</router-link>
           <div class="hidden md:flex gap-6">
             <router-link to="/jobs" class="text-primary font-bold border-b-2 border-secondary pb-1">Find Jobs</router-link>
-            <a class="text-slate-500 font-semibold hover:text-primary transition-all duration-200" href="#">Companies</a>
-            <a class="text-slate-500 font-semibold hover:text-primary transition-all duration-200" href="#">Pricing</a>
+            <router-link to="/companies" class="text-slate-500 font-semibold hover:text-primary transition-all duration-200">Companies</router-link>
+            <router-link to="/pricing" class="text-slate-500 font-semibold hover:text-primary transition-all duration-200">Pricing</router-link>
           </div>
         </div>
 
@@ -135,7 +135,7 @@ async function handleLogout() {
 
           <template v-else>
             <router-link to="/login" class="text-slate-600 font-bold hover:text-primary px-4 py-2 transition-all">Login</router-link>
-            <button class="bg-secondary text-white px-6 py-2.5 rounded-xl font-bold shadow-md shadow-secondary/20 hover:scale-105 active:scale-95 transition-all">Post a Job</button>
+            <router-link to="/register" class="bg-secondary text-white px-6 py-2.5 rounded-xl font-bold shadow-md shadow-secondary/20 hover:scale-105 active:scale-95 transition-all">Post a Job</router-link>
           </template>
         </div>
       </div>

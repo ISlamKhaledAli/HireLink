@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { getDashboardStatsApi } from "@/services/admin";
+import { getDashboardStatsApi, getPendingJobsApi, approveJobApi, rejectJobApi, getPendingCompaniesApi, approveCompanyApi } from "@/services/admin";
 
 export const useAdminStore = defineStore("admin", () => {
   const stats = ref({
@@ -13,6 +13,9 @@ export const useAdminStore = defineStore("admin", () => {
 
   const pendingJobs = ref([]);
   const pagination = ref({});
+  
+  const pendingCompanies = ref([]);
+  const paginationCompanies = ref({});
 
   const loading = ref(false);
   const loadingJobs = ref(false);
@@ -70,10 +73,37 @@ export const useAdminStore = defineStore("admin", () => {
     }
   }
 
+  async function fetchPendingCompanies(page = 1) {
+    loadingJobs.value = true;
+    try {
+      const response = await getPendingCompaniesApi(page);
+      pendingCompanies.value = response.data.data;
+      paginationCompanies.value = response.data.meta || response.data;
+    } catch (err) {
+      console.error("Fetch Pending Companies Error:", err);
+      error.value = "Failed to load pending companies.";
+    } finally {
+      loadingJobs.value = false;
+    }
+  }
+
+  async function approveCompany(id) {
+    try {
+      await approveCompanyApi(id);
+      pendingCompanies.value = pendingCompanies.value.filter((c) => c.id !== id);
+      stats.value.total_users++; // Technically they were already users, but maybe we track approved ones
+    } catch (err) {
+      console.error("Approve Company Error:", err);
+      throw err;
+    }
+  }
+
   return {
     stats,
     pendingJobs,
     pagination,
+    pendingCompanies,
+    paginationCompanies,
     loading,
     loadingJobs,
     error,
@@ -81,6 +111,8 @@ export const useAdminStore = defineStore("admin", () => {
     fetchPendingJobs,
     approveJob,
     rejectJob,
+    fetchPendingCompanies,
+    approveCompany,
   };
 
 });

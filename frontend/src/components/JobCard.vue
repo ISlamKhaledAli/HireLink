@@ -72,7 +72,7 @@ function formatSalary(amount) {
         </div>
         <div class="flex flex-col items-start sm:items-end">
           <span class="text-xl font-black text-secondary flex items-center gap-1">
-            {{ formatSalary(job.salary_min) }} - {{ formatSalary(job.salary_max) }}
+            {{ job.salary_range || 'Negotiable' }}
           </span>
           <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Expected Annual Salary</span>
         </div>

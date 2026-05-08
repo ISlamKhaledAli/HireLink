@@ -9,6 +9,9 @@ const CandidateApplicationsView = () =>
 const ProfileView = () => import("@/views/ProfileView.vue");
 const AdminDashboardView = () => import("@/views/AdminDashboardView.vue");
 const AdminJobsView = () => import("@/views/AdminJobsView.vue");
+const AdminApplicationsView = () => import("@/views/AdminApplicationsView.vue");
+const CompaniesView = () => import("@/views/CompaniesView.vue");
+const PricingView = () => import("@/views/PricingView.vue");
 
 const routes = [
   { path: "/login", component: Login, meta: { title: "Login" } },
@@ -18,6 +21,12 @@ const routes = [
     name: "jobs",
     component: () => import("@/views/JobsView.vue"),
     meta: { title: "Job Listings" },
+  },
+  {
+    path: "/jobs/:id",
+    name: "job-detail",
+    component: () => import("@/views/JobDetailView.vue"),
+    meta: { title: "Job Details" },
   },
   {
     path: "/",
@@ -45,6 +54,29 @@ const routes = [
     path: "/admin/jobs",
     component: AdminJobsView,
     meta: { requiresAuth: true, role: "admin", title: "Manage Jobs" },
+  },
+  {
+    path: "/admin/companies",
+    name: "admin-companies",
+    component: () => import("@/views/AdminCompaniesView.vue"),
+    meta: { requiresAuth: true, role: "admin", title: "Manage Companies" },
+  },
+  {
+    path: "/admin/applications",
+    component: AdminApplicationsView,
+    meta: { requiresAuth: true, role: "admin", title: "All Applications" },
+  },
+  {
+    path: "/companies",
+    name: "companies",
+    component: CompaniesView,
+    meta: { title: "Companies" },
+  },
+  {
+    path: "/pricing",
+    name: "pricing",
+    component: PricingView,
+    meta: { title: "Pricing" },
   },
   {
     path: '/employer/jobs',

@@ -17,13 +17,21 @@ class JobResource extends JsonResource
             'category_id' => $this->category_id,
             'title' => $this->title,
             'description' => $this->description,
-            'category' => $this->whenLoaded('category', fn () => $this->category->name),
+            'category' => $this->whenLoaded('category', fn () => [
+                'id' => $this->category->id,
+                'name' => $this->category->name,
+            ]),
             'location' => $this->location,
             'work_type' => $this->work_type,
             'salary_range' => $this->salary_range,
             'deadline' => $this->deadline->format('Y-m-d'),
             'status' => $this->status,
             'employer_id' => $this->user_id,
+            'user' => $this->whenLoaded('user', fn () => [
+                'id' => $this->user->id,
+                'name' => $this->user->name,
+            ]),
+            'applications_count' => $this->whenCounted('applications'),
             'created_at' => $this->created_at->toDateTimeString(),
         ];
     }

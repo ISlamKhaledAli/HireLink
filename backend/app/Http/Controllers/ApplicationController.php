@@ -49,7 +49,7 @@ class ApplicationController extends Controller
             'resume_path' => $resumePath,
         ]);
 
-        return response()->json($application, 201);
+        return response()->json($application->load(['job', 'candidate']), 201);
     }
 
     /**
@@ -90,22 +90,60 @@ class ApplicationController extends Controller
     }
 
     /**
-     * List applications for an employer.
+     * List applications — works for both employers and candidates.
      */
     public function index(Request $request)
     {
-        // Auth: employer only
-        if (!auth()->user()->hasRole('employer')) {
-            abort(403, 'Only employers can view applications.');
+        $user = auth()->user();
+
+        // Employer: return applications for their jobs
+        if ($user->hasRole('employer')) {
+            $applications = Application::with(['job', 'candidate'])
+                ->whereHas('job', function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                })
+                ->latest()
+                ->get();
+
+            return response()->json($applications);
         }
 
-        // Return all applications for jobs that belong to this employer
-        $applications = Application::with(['job', 'candidate'])
-            ->whereHas('job', function ($query) {
-                $query->where('user_id', auth()->id());
-            })
-            ->get();
+        // Candidate: return their own applications
+        if ($user->hasRole('candidate')) {
+            $applications = Application::with(['job.user', 'job.category'])
+                ->where('candidate_id', $user->id)
+                ->latest()
+                ->get();
 
-        return response()->json($applications);
+            return response()->json($applications);
+        }
+
+        // Admin: return all
+        if ($user->hasRole('admin')) {
+            $applications = Application::with(['job', 'candidate'])
+                ->latest()
+                ->get();
+
+            return response()->json($applications);
+        }
+
+        abort(403, 'Unauthorized.');
+    }
+    /**
+     * Download or view the candidate's resume.
+     */
+    public function downloadResume(Application $application)
+    {
+        // Only the employer who owns the job, the candidate themselves, or an admin can view the CV.
+        $user = auth()->user();
+        if ($user->hasRole('admin') || $user->id === $application->candidate_id || $user->id === $application->job->user_id) {
+            if (!$application->resume_path || !\Storage::disk('local')->exists($application->resume_path)) {
+                abort(404, 'Resume file not found.');
+            }
+
+            return \Storage::disk('local')->download($application->resume_path);
+        }
+
+        abort(403, 'Unauthorized.');
     }
 }

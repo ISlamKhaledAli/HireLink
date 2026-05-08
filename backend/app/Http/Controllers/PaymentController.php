@@ -29,8 +29,8 @@ class PaymentController extends Controller
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => env('FRONTEND_URL') . '/admin/jobs?payment=success',
-            'cancel_url' => env('FRONTEND_URL') . '/admin/jobs?payment=cancelled',
+            'success_url' => env('FRONTEND_URL') . '/dashboard?payment=success',
+            'cancel_url' => env('FRONTEND_URL') . '/dashboard?payment=cancelled',
             'payment_intent_data' => [
                 'metadata' => [
                     'application_id' => $application->id,
