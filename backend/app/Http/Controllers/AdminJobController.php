@@ -54,8 +54,8 @@ class AdminJobController extends Controller
 public function dashboard()
 {
     return response()->json([
-        'users_count' => User::count(),
-        'jobs_count' => Job::count(),
+        'total_users' => User::count(),
+        'total_jobs' => Job::count(),
         'pending_jobs' => Job::where('status', 'pending')->count(),
         'approved_jobs' => Job::where('status', 'approved')->count(),
         'rejected_jobs' => Job::where('status', 'rejected')->count(),
